@@ -1,0 +1,244 @@
+{
+  "dataSchema": {
+    "dataSource": "parkings-druid-stream",
+    "timestampSpec": {
+      "column": "lastUpd",
+      "format": "iso",
+      "missingValue": null
+    },
+    "dimensionsSpec": {
+      "dimensions": [
+        {
+          "type": "string",
+          "name": "address",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "isEmtPark",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "float",
+          "name": "longitud",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "float",
+          "name": "latitud",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "float",
+          "name": "max_free_parking",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "float",
+          "name": "min_free_parking",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "float",
+          "name": "avg_free_parking",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "string",
+          "name": "postalCode",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "month",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "day",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "id",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        }
+      ],
+      "dimensionExclusions": [
+        "__time",
+        "lastUpd",
+        "max_real_time_freeParking",
+        "max_occupation_level",
+        "hyperUnique",
+        "sum_freeParking",
+        "count",
+        "min_real_time_freeParking",
+        "last_real_time_freeParking",
+        "min_occupation_level",
+        "freeParking",
+        "occupation_level",
+        "last_occupation_level",
+        "sum_occupation_level"
+      ]
+    },
+    "metricsSpec": [
+      {
+        "type": "count",
+        "name": "count"
+      },
+      {
+        "type": "longSum",
+        "name": "sum_freeParking",
+        "fieldName": "freeParking",
+        "expression": null
+      },
+      {
+        "type": "longSum",
+        "name": "sum_occupation_level",
+        "fieldName": "occupation_level",
+        "expression": null
+      },
+      {
+        "type": "longMax",
+        "name": "max_real_time_freeParking",
+        "fieldName": "freeParking",
+        "expression": null
+      },
+      {
+        "type": "longMin",
+        "name": "min_real_time_freeParking",
+        "fieldName": "freeParking",
+        "expression": null
+      },
+      {
+        "type": "longLast",
+        "name": "last_real_time_freeParking",
+        "fieldName": "freeParking"
+      },
+      {
+        "type": "hyperUnique",
+        "name": "hyperUnique",
+        "fieldName": "id",
+        "isInputHyperUnique": false,
+        "round": false
+      },
+      {
+        "type": "longMax",
+        "name": "max_occupation_level",
+        "fieldName": "occupation_level",
+        "expression": null
+      },
+      {
+        "type": "longMin",
+        "name": "min_occupation_level",
+        "fieldName": "occupation_level",
+        "expression": null
+      },
+      {
+        "type": "longLast",
+        "name": "last_occupation_level",
+        "fieldName": "occupation_level"
+      }
+    ],
+    "granularitySpec": {
+      "type": "uniform",
+      "segmentGranularity": "HOUR",
+      "queryGranularity": "MINUTE",
+      "rollup": true,
+      "intervals": null
+    },
+    "transformSpec": {
+      "filter": null,
+      "transforms": []
+    }
+  },
+  "ioConfig": {
+    "topic": "parkings-druid-stream",
+    "inputFormat": {
+      "type": "json",
+      "flattenSpec": {
+        "useFieldDiscovery": true,
+        "fields": []
+      },
+      "featureSpec": {}
+    },
+    "replicas": 1,
+    "taskCount": 1,
+    "taskDuration": "PT3600S",
+    "consumerProperties": {
+      "bootstrap.servers": "localhost:9092"
+    },
+    "pollTimeout": 100,
+    "startDelay": "PT5S",
+    "period": "PT30S",
+    "useEarliestOffset": false,
+    "completionTimeout": "PT1800S",
+    "lateMessageRejectionPeriod": null,
+    "earlyMessageRejectionPeriod": null,
+    "lateMessageRejectionStartDateTime": null,
+    "stream": "parkings-druid-stream",
+    "useEarliestSequenceNumber": false,
+    "type": "kafka"
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "maxRowsInMemory": 1000000,
+    "maxBytesInMemory": 0,
+    "maxRowsPerSegment": 5000000,
+    "maxTotalRows": null,
+    "intermediatePersistPeriod": "PT10M",
+    "basePersistDirectory": "/Users/alberto/TFM/apache-druid-0.17.0/var/tmp/druid-realtime-persist6252842342911253044",
+    "maxPendingPersists": 0,
+    "indexSpec": {
+      "bitmap": {
+        "type": "concise"
+      },
+      "dimensionCompression": "lz4",
+      "metricCompression": "lz4",
+      "longEncoding": "longs"
+    },
+    "indexSpecForIntermediatePersists": {
+      "bitmap": {
+        "type": "concise"
+      },
+      "dimensionCompression": "lz4",
+      "metricCompression": "lz4",
+      "longEncoding": "longs"
+    },
+    "buildV9Directly": true,
+    "reportParseExceptions": false,
+    "handoffConditionTimeout": 0,
+    "resetOffsetAutomatically": false,
+    "segmentWriteOutMediumFactory": null,
+    "workerThreads": null,
+    "chatThreads": null,
+    "chatRetries": 8,
+    "httpTimeout": "PT10S",
+    "shutdownTimeout": "PT80S",
+    "offsetFetchPeriod": "PT30S",
+    "intermediateHandoffPeriod": "P2147483647D",
+    "logParseExceptions": false,
+    "maxParseExceptions": 2147483647,
+    "maxSavedParseExceptions": 0,
+    "skipSequenceNumberAvailabilityCheck": false,
+    "repartitionTransitionDuration": "PT120S"
+  },
+  "type": "kafka"
+}

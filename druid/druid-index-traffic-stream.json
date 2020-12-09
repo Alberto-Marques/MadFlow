@@ -1,0 +1,294 @@
+{
+  "dataSchema": {
+    "dataSource": "traffic-druid-stream",
+    "timestampSpec": {
+      "column": "fecha",
+      "format": "d/M/yyyy H:mm:ss",
+      "missingValue": null
+    },
+    "dimensionsSpec": {
+      "dimensions": [
+        {
+          "type": "string",
+          "name": "nombre",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "tipo_elem",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "float",
+          "name": "latitud",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "float",
+          "name": "longitud",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": false
+        },
+        {
+          "type": "string",
+          "name": "year",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "month",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "day",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "hour",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "distrito",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "cod_cent",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        },
+        {
+          "type": "string",
+          "name": "id",
+          "multiValueHandling": "SORTED_ARRAY",
+          "createBitmapIndex": true
+        }
+      ],
+      "dimensionExclusions": [
+        "max_intensidad",
+        "last_fluidez",
+        "intensidad",
+        "ocupacion",
+        "max_carga",
+        "min_fluidez",
+        "carga",
+        "max_ocupacion",
+        "sum_carga",
+        "last_intensidad",
+        "fluidez",
+        "min_intensidad",
+        "HyperUnique",
+        "__time",
+        "min_ocupacion",
+        "sum_fluidez",
+        "last_carga",
+        "max_fluidez",
+        "count",
+        "sum_ocupacion",
+        "min_carga",
+        "sum_intensidad",
+        "last_ocupacion",
+        "fecha"
+      ]
+    },
+    "metricsSpec": [
+      {
+        "type": "count",
+        "name": "count"
+      },
+      {
+        "type": "longSum",
+        "name": "sum_carga",
+        "fieldName": "carga",
+        "expression": null
+      },
+      {
+        "type": "longSum",
+        "name": "sum_fluidez",
+        "fieldName": "fluidez",
+        "expression": null
+      },
+      {
+        "type": "longSum",
+        "name": "sum_intensidad",
+        "fieldName": "intensidad",
+        "expression": null
+      },
+      {
+        "type": "longSum",
+        "name": "sum_ocupacion",
+        "fieldName": "ocupacion",
+        "expression": null
+      },
+      {
+        "type": "hyperUnique",
+        "name": "HyperUnique",
+        "fieldName": "id",
+        "isInputHyperUnique": false,
+        "round": false
+      },
+      {
+        "type": "longMax",
+        "name": "max_carga",
+        "fieldName": "carga",
+        "expression": null
+      },
+      {
+        "type": "longMin",
+        "name": "min_carga",
+        "fieldName": "carga",
+        "expression": null
+      },
+      {
+        "type": "longLast",
+        "name": "last_carga",
+        "fieldName": "carga"
+      },
+      {
+        "type": "longMax",
+        "name": "max_fluidez",
+        "fieldName": "fluidez",
+        "expression": null
+      },
+      {
+        "type": "longMin",
+        "name": "min_fluidez",
+        "fieldName": "fluidez",
+        "expression": null
+      },
+      {
+        "type": "longLast",
+        "name": "last_fluidez",
+        "fieldName": "fluidez"
+      },
+      {
+        "type": "longMax",
+        "name": "max_intensidad",
+        "fieldName": "intensidad",
+        "expression": null
+      },
+      {
+        "type": "longMin",
+        "name": "min_intensidad",
+        "fieldName": "intensidad",
+        "expression": null
+      },
+      {
+        "type": "longLast",
+        "name": "last_intensidad",
+        "fieldName": "intensidad"
+      },
+      {
+        "type": "longMax",
+        "name": "max_ocupacion",
+        "fieldName": "ocupacion",
+        "expression": null
+      },
+      {
+        "type": "longMin",
+        "name": "min_ocupacion",
+        "fieldName": "ocupacion",
+        "expression": null
+      },
+      {
+        "type": "longLast",
+        "name": "last_ocupacion",
+        "fieldName": "ocupacion"
+      }
+    ],
+    "granularitySpec": {
+      "type": "uniform",
+      "segmentGranularity": "HOUR",
+      "queryGranularity": "MINUTE",
+      "rollup": true,
+      "intervals": null
+    },
+    "transformSpec": {
+      "filter": null,
+      "transforms": []
+    }
+  },
+  "ioConfig": {
+    "topic": "traffic-druid-stream",
+    "inputFormat": {
+      "type": "json",
+      "flattenSpec": {
+        "useFieldDiscovery": true,
+        "fields": []
+      },
+      "featureSpec": {}
+    },
+    "replicas": 1,
+    "taskCount": 1,
+    "taskDuration": "PT3600S",
+    "consumerProperties": {
+      "bootstrap.servers": "localhost:9092"
+    },
+    "pollTimeout": 100,
+    "startDelay": "PT5S",
+    "period": "PT30S",
+    "useEarliestOffset": true,
+    "completionTimeout": "PT1800S",
+    "lateMessageRejectionPeriod": null,
+    "earlyMessageRejectionPeriod": null,
+    "lateMessageRejectionStartDateTime": null,
+    "stream": "traffic-druid-stream",
+    "useEarliestSequenceNumber": true,
+    "type": "kafka"
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "maxRowsInMemory": 1000000,
+    "maxBytesInMemory": 0,
+    "maxRowsPerSegment": 5000000,
+    "maxTotalRows": null,
+    "intermediatePersistPeriod": "PT10M",
+    "basePersistDirectory": "/Users/alberto/TFM/apache-druid-0.17.0/var/tmp/druid-realtime-persist909411224050893858",
+    "maxPendingPersists": 0,
+    "indexSpec": {
+      "bitmap": {
+        "type": "concise"
+      },
+      "dimensionCompression": "lz4",
+      "metricCompression": "lz4",
+      "longEncoding": "longs"
+    },
+    "indexSpecForIntermediatePersists": {
+      "bitmap": {
+        "type": "concise"
+      },
+      "dimensionCompression": "lz4",
+      "metricCompression": "lz4",
+      "longEncoding": "longs"
+    },
+    "buildV9Directly": true,
+    "reportParseExceptions": false,
+    "handoffConditionTimeout": 0,
+    "resetOffsetAutomatically": false,
+    "segmentWriteOutMediumFactory": null,
+    "workerThreads": null,
+    "chatThreads": null,
+    "chatRetries": 8,
+    "httpTimeout": "PT10S",
+    "shutdownTimeout": "PT80S",
+    "offsetFetchPeriod": "PT30S",
+    "intermediateHandoffPeriod": "P2147483647D",
+    "logParseExceptions": false,
+    "maxParseExceptions": 2147483647,
+    "maxSavedParseExceptions": 0,
+    "skipSequenceNumberAvailabilityCheck": false,
+    "repartitionTransitionDuration": "PT120S"
+  },
+  "type": "kafka"
+}
