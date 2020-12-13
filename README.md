@@ -107,6 +107,18 @@ Comprobamos la lista de topics creados
 $ bin/kafka-topics.sh --list --zookeeper localhost:2181
 ```
 
+Ejecutamos los 3 productores para empezar a producir datos:
+```
+$ python3 kafka_traffic_producer.py
+```
+```
+$ python3 kafka_parkings_producer.py
+```
+```
+$ python3 kafka_bicimad_producer.py
+```
+
+
 ###Spark
 Para ejecutar los procesos spark usar:
 ```
