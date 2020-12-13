@@ -24,7 +24,7 @@ sparkSession = SparkSession\
          #.config('job.local.dir', 'file:/Users/alberto/TFM/MadFlow') \
 
 sparkSession.sparkContext.setLogLevel('WARN')
-sparkSession.conf.set("spark.sql.streaming.forceDeleteTempCheckpointLocation", "True")
+#sparkSession.conf.set("spark.sql.streaming.forceDeleteTempCheckpointLocation", "True")
 
 traffic_historic = sparkSession.read.parquet("/user/alberto/madflow/traffic/history")
 _traffic_year = str(traffic_historic.agg(sf.max("year")).collect()[0][0])
@@ -32,9 +32,9 @@ _traffic_month = str(traffic_historic.agg(sf.max("month")).collect()[0][0])
 
 
 #HACEMOS EL ENVÍO DE ALGUNOS DÍAS PORQUE NO PUEDE CON EL MES COMPLETO DE UNA VEZ
-#Para ingestar el mes entero borrar del patch: +_traffic_month+"/day=31"
+#Para ingestar el mes entero borrar del path: +_traffic_month+"/day=31"
 last_traffic_historic = sparkSession.read.parquet(
-    "/user/alberto/madflow/traffic/history/year="+_traffic_year+"/month="+_traffic_month+"/day=31")
+    "/user/alberto/madflow/traffic/history/year="+_traffic_year+"/month="+_traffic_month+"/day=24")
 
 last_traffic_historic = last_traffic_historic.select(last_traffic_historic["id"].cast('string').alias("key"),
                              to_json(struct("*")).alias("value"))\

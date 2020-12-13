@@ -45,6 +45,7 @@ def send_bicimad_events():
             kafka_producer.send(topic=kafka_topic, key=row['id'].encode('utf-8'), value=json_row)
         i = i + 1
 
+        # Ajustamos para actualizar aproximádamente cada 2 minutos
         time.sleep(0.5)
     # Cierre del fichero
     infile.close()
@@ -56,4 +57,4 @@ def send_bicimad_events():
 # Ejecutar continuamente hasta parada manual
 while True:
     send_bicimad_events()
-    time.sleep(10)
+    time.sleep(3)

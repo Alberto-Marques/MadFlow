@@ -16,7 +16,7 @@ execution_day = execution_date.day
 
 #En la primera ejecución usar la siguiente ruta que contiene una muestra de valores para generar la tabla inicial
 #hdfs_parkings_streaming_path = ("/user/alberto/test/parking/year=2020")
-hdfs_parkings_streaming_path = ("/user/alberto/madflow/parkings/stream")
+hdfs_parkings_streaming_path = ("/user/alberto/madflow/parkings/stream_data")
 
 
 #TODO Pensar si leo el histórico completo o solo las particiones más recientes cada vez que actualizo la tabla

@@ -170,7 +170,7 @@
         "expression": null
       },
       {
-        "type": "longLast",
+        "type": "stringLast",
         "name": "last_occupation",
         "fieldName": "occupation"
       }

@@ -12,7 +12,8 @@ spark = SparkSession\
         .getOrCreate()
 spark.sparkContext.setLogLevel('WARN')
 
-traffic_historic_csv_path = os.path.join('Users/alberto/TFM/Madflow/data/historic', '10-2020.csv')
+#Escoger ruta del mes a cargar
+traffic_historic_csv_path = os.path.join('Users/alberto/TFM/Madflow/data/historic', '11-2019.csv')
 _year = traffic_historic_csv_path[-8:-4]
 _month = traffic_historic_csv_path[-11:-9]
 
@@ -60,10 +61,10 @@ traffic_locations_partitions = traffic_locations\
     .withColumn("hour", sf.substring('fecha', 12, 2)) \
     .withColumn("minute", sf.substring('fecha', 15, 2))
 
-"""
+print("#################")
 print(traffic_locations_partitions.count())
 #11401984
-"""
+
 
 
 traffic_locations_partitions.write.partitionBy("year", "month", "day").mode("append").parquet("/user/alberto/madflow/traffic/history")

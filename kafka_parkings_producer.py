@@ -57,5 +57,6 @@ def send_parking_events():
 # Ejecutar continuamente hasta parada manual
 while True:
     send_parking_events()
+    # Paramos 5 minutos ya que los datos no se actualizan constantemente
     time.sleep(300)
 

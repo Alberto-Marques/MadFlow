@@ -11,8 +11,8 @@ spark = SparkSession\
         .getOrCreate()
 spark.sparkContext.setLogLevel('WARN')
 
-points_csv_path = os.path.join('Users/alberto/TFM/Madflow/data', 'points_traffic_2020-10-31.csv')
-date = "2020-10-31"
+points_csv_path = os.path.join('Users/alberto/TFM/Madflow/data', 'points_traffic_2020-03-31.csv')
+date = "2020-03-31"
 
 func = udf(lambda x: datetime.strptime(x, '%Y-%m-%d'), DateType())
 

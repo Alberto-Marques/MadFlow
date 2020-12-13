@@ -128,7 +128,7 @@
         "expression": null
       },
       {
-        "type": "longLast",
+        "type": "stringLast",
         "name": "last_real_time_freeParking",
         "fieldName": "freeParking"
       },
@@ -152,7 +152,7 @@
         "expression": null
       },
       {
-        "type": "longLast",
+        "type": "stringLast",
         "name": "last_occupation_level",
         "fieldName": "occupation_level"
       }

@@ -80,23 +80,25 @@ queryToKafka = bicimad_partition\
             to_json(struct("*")).alias("value"))\
     .writeStream \
     .format("kafka") \
-    .trigger(processingTime='1 minutes') \
+    .trigger(processingTime='3 minutes') \
     .option("kafka.bootstrap.servers", 'localhost:9092') \
     .option("topic", "bicimad-druid-stream") \
-    .option("checkpointLocation", "/tmp/checkpoint/kafka/bicimad/") \
+    .option("checkpointLocation", "/tmp/checkpoint/kafka/stream/bicimad/") \
     .outputMode("Append") \
     .start()
+#old checkpoint path: /tmp/checkpoint/kafka/bicimad/
+
 
 queryToHDFS = bicimad_partition.writeStream \
     .format("parquet") \
-    .trigger(processingTime='1 minutes') \
+    .trigger(processingTime='3 minutes') \
     .partitionBy("year", "month", "day") \
-    .option("checkpointLocation", "/tmp/checkpoint/hdfs/parkings-stream/") \
-    .option("path", "/user/alberto/madflow/bicimad") \
+    .option("checkpointLocation", "/tmp/checkpoint/hdfs/stream/bicimad") \
+    .option("path", "/user/alberto/madflow/bicimad_data") \
     .outputMode("append") \
     .start()
-
-
+# old checkpoint path: .option("checkpointLocation", "/tmp/checkpoint/hdfs/bicimad-stream/")
+# old hdfs path: .option("path", "/user/alberto/madflow/bicimad")
 """
 query = bicimad_partition.writeStream\
     .outputMode("append")\

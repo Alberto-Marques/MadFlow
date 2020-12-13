@@ -24,7 +24,7 @@ sparkSession = SparkSession\
          #.config('job.local.dir', 'file:/Users/alberto/TFM/MadFlow') \
 
 sparkSession.sparkContext.setLogLevel('WARN')
-sparkSession.conf.set("spark.sql.streaming.forceDeleteTempCheckpointLocation", "True")
+#sparkSession.conf.set("spark.sql.streaming.forceDeleteTempCheckpointLocation", "True")
 
 
 parkingSchema = StructType()\
@@ -124,22 +124,25 @@ queryToKafka = parkings_partition\
             to_json(struct("*")).alias("value"))\
     .writeStream \
     .format("kafka") \
-    .trigger(processingTime='2 minutes') \
+    .trigger(processingTime='5 minutes') \
     .option("kafka.bootstrap.servers", 'localhost:9092') \
     .option("topic", "parkings-druid-stream") \
-    .option("checkpointLocation", "/tmp/checkpoint/kafka/parkings/") \
+    .option("checkpointLocation", "/tmp/checkpoint/kafka/stream/parkings/") \
     .outputMode("Append") \
     .start()
-
+#old checkpoint path: /tmp/checkpoint/kafka/parkings/
 
 queryToHDFS = parkings_partition.writeStream \
     .format("parquet") \
-    .trigger(processingTime='2 minutes') \
+    .trigger(processingTime='5 minutes') \
     .partitionBy("year", "month", "day") \
-    .option("checkpointLocation", "/tmp/checkpoint/hdfs/parkings-stream/") \
-    .option("path", "/user/alberto/madflow/parkings/stream") \
+    .option("checkpointLocation", "/tmp/checkpoint/hdfs/stream/parkings") \
+    .option("path", "/user/alberto/madflow/parkings/stream_data") \
     .outputMode("append") \
     .start()
+
+# old checkpoint path: .option("/tmp/checkpoint/hdfs/parkings-stream/")
+# old hdfs path: .option("/user/alberto/madflow/parkings/stream")
 
 """
 query = parkings_partition.writeStream\

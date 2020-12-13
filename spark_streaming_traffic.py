@@ -23,7 +23,7 @@ sparkSession = SparkSession\
          #.config('job.local.dir', 'file:/Users/alberto/TFM/MadFlow') \
 
 sparkSession.sparkContext.setLogLevel('WARN')
-sparkSession.conf.set("spark.sql.streaming.forceDeleteTempCheckpointLocation", "True")
+#sparkSession.conf.set("spark.sql.streaming.forceDeleteTempCheckpointLocation", "True")
 
 
 # Definición del esquema de tráfico
@@ -92,19 +92,23 @@ queryToKafka = traffic_locations_partitions\
     .trigger(processingTime='2 minutes') \
     .option("kafka.bootstrap.servers", 'localhost:9092') \
     .option("topic", "traffic-druid-stream") \
-    .option("checkpointLocation", "/tmp/checkpoint/kafka/traffic/stream/") \
+    .option("checkpointLocation", "/tmp/checkpoint/kafka/stream/traffic") \
     .outputMode("Append") \
     .start()
+#old checkpoint path: /tmp/checkpoint/kafka/traffic/stream/
 
 # Escritura del resultado en HDFS
 queryToHDFS = traffic_locations_partitions.writeStream \
     .format("parquet") \
     .trigger(processingTime='2 minutes') \
     .partitionBy("year", "month", "day") \
-    .option("checkpointLocation", "/tmp/checkpoint/hdfs/traffic-stream/") \
-    .option("path", "/user/alberto/madflow/traffic/stream") \
+    .option("checkpointLocation", "/tmp/checkpoint/hdfs/stream/traffic") \
+    .option("path", "/user/alberto/madflow/traffic/stream_data") \
     .outputMode("append") \
     .start()
+
+# old checkpoint path: .option("/tmp/checkpoint/hdfs/traffic-stream/")
+# old hdfs path: .option("/user/alberto/madflow/traffic/stream")
 
 """
 # Imprimir por consola el resultado de cada micro-batch
@@ -215,7 +219,7 @@ parkings_partition = parkings_occupation_metrics \
 
 
 # Envío del resultado a kafka en micro-batches
-queryToKafka = parkings_partition\
+queryParkingToKafka = parkings_partition\
     .select(parkings_partition["id"].cast('string').alias("key"),
             to_json(struct("*")).alias("value"))\
     .writeStream \
@@ -223,17 +227,17 @@ queryToKafka = parkings_partition\
     .trigger(processingTime='2 minutes') \
     .option("kafka.bootstrap.servers", 'localhost:9092') \
     .option("topic", "parkings-druid-stream") \
-    .option("checkpointLocation", "/tmp/checkpoint/kafka/parkings/") \
+    .option("checkpointLocation", "/tmp/checkpoint/kafka/stream/parkings/") \
     .outputMode("Append") \
     .start()
 
 
-queryToHDFS = parkings_partition.writeStream \
+queryParkingToHDFS = parkings_partition.writeStream \
     .format("parquet") \
     .trigger(processingTime='2 minutes') \
     .partitionBy("year", "month", "day") \
-    .option("checkpointLocation", "/tmp/checkpoint/hdfs/parkings-stream/") \
-    .option("path", "/user/alberto/madflow/parkings/stream") \
+    .option("checkpointLocation", "/tmp/checkpoint/hdfs/stream/parkings") \
+    .option("path", "/user/alberto/madflow/parkings/stream_data") \
     .outputMode("append") \
     .start()
 
@@ -288,7 +292,7 @@ bicimad_partition = bicimad_coordinates\
 
 
 # Envío del resultado a kafka en micro-batches
-queryToKafka = bicimad_partition\
+queryBicimadToKafka = bicimad_partition\
     .select(bicimad_partition["id"].cast('string').alias("key"),
             to_json(struct("*")).alias("value"))\
     .writeStream \
@@ -296,16 +300,16 @@ queryToKafka = bicimad_partition\
     .trigger(processingTime='1 minutes') \
     .option("kafka.bootstrap.servers", 'localhost:9092') \
     .option("topic", "bicimad-druid-stream") \
-    .option("checkpointLocation", "/tmp/checkpoint/kafka/bicimad/") \
+    .option("checkpointLocation", "/tmp/checkpoint/kafka/stream/bicimad/") \
     .outputMode("Append") \
     .start()
 
-queryToHDFS = bicimad_partition.writeStream \
+queryBicimadToHDFS = bicimad_partition.writeStream \
     .format("parquet") \
     .trigger(processingTime='1 minutes') \
     .partitionBy("year", "month", "day") \
-    .option("checkpointLocation", "/tmp/checkpoint/hdfs/parkings-stream/") \
-    .option("path", "/user/alberto/madflow/bicimad") \
+    .option("checkpointLocation", "/tmp/checkpoint/hdfs/stream/bicimad") \
+    .option("path", "/user/alberto/madflow/bicimad_data") \
     .outputMode("append") \
     .start()
 """
